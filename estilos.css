@@ -1,0 +1,136 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#product-table {
+    width: 100%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    background-color: #fff;
+}
+
+th {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilo do corpo e fundo */
+body {
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    transition: background-color 0.6s, color 0.6s; /* Aumentado para 0.6s */
+}
+
+/* Tema claro */
+.light-theme {
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* Tema escuro */
+.dark-theme {
+    background-color: #1a1a1a;
+    color: #f1f1f1;
+}
+
+/* Estilo do chatbot */
+#chatbot {
+    flex: 1;
+    background: #fff;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.6s, color 0.6s; /* Aumentado para 0.6s */
+}
+
+/* Estilo da caixa de mensagens */
+#chat-window {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f1f1f1;
+}
+
+.dark-theme #chat-window {
+    background: #333;
+}
+
+/* Estilo dos botões */
+button {
+    background: linear-gradient(135deg, #333, #555);
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.6s ease, transform 0.4s, border 0.6s ease; /* Aumentado para 0.6s e 0.4s */
+    font-size: 14px;
+    margin: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #555, #777);
+    transform: scale(1.05);
+    border: 2px solid #fff;
+}
+
+/* Estilo do campo de entrada */
+.input-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#user-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    transition: border-color 0.6s; /* Aumentado para 0.6s */
+}
+
+#user-input:focus {
+    border-color: #555;
+    outline: none;
+}
+
+/* Estilo do rodapé */
+#footer {
+    background-color: #f8f8f8;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+}

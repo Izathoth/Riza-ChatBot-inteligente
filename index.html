@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIZA I.A -> Chatbot</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="console.css">
+    <!-- Biblioteca quase obrigatoria -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.basic.min.js"></script>
+    <style>
+        /* Estilos para o modal */
+        .modal {
+            display: none; /* Oculta o modal por padrão */
+            position: fixed; /* Fica fixo na tela */
+            z-index: 1000; /* Coloca o modal acima de outros elementos */
+            left: 0;
+            top: 0;
+            width: 100%; /* Largura total */
+            height: 100%; /* Altura total */
+            overflow: auto; /* Permite rolagem se necessário */
+            background-color: rgb(0,0,0); /* Fundo preto com opacidade */
+            background-color: rgba(0,0,0,0.4); /* Fundo com opacidade */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* Centraliza o modal */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Largura do modal */
+            border-radius: 5px; /* Bordas arredondadas */
+        }
+
+        .close {
+            color: #aaa; /* Cor do botão de fechar */
+            float: right; /* Alinha à direita */
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black; /* Muda a cor ao passar o mouse */
+            text-decoration: none;
+            cursor: pointer; /* Cursor pointer ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+    <!-- Descrição da RIZA I.A -->
+    <div id="promo-box"></div>
+
+    <div id="chatbot">
+        <div id="chat-window">
+            <div id="messages"></div>
+            <div id="product-table" style="display:none;"></div>
+            <div id="cart-summary" style="display:none;"></div>
+            <div id="typing-indicator" style="display:none;">
+                Riza I.A. digitando<span class="dots"></span>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Digite sua mensagem..." />
+            <button id="send-button">Enviar</button> <!-- Botão de enviar -->
+        </div>
+
+        <div class="button-container">
+            <button id="clear-button">Limpar</button> <!-- Botão para limpar a conversa -->
+            <button id="show-products-button">Mostrar Produtos</button> <!-- Botão para mostrar produtos -->
+            <button id="clear-table-button">Limpar Tabela</button> <!-- Botão para limpar a tabela -->
+            <button id="about-button">Sobre</button> <!-- Botão para informações sobre a IA -->
+        </div>
+
+        <div class="theme-container">
+            <button id="theme-toggle">Mudar Tema</button> <!-- Botão para mudar tema -->
+        </div>
+
+        <div id="quick-responses"></div>
+    </div>
+
+    <!-- Modal de Informação -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Sobre RIZA I.A</h2>
+            <p>RIZA I.A é um chatbot projetado para ajudar você com suas perguntas e necessidades de produtos!</p>
+        </div>
+    </div>
+
+    
+    <footer id="footer">
+        <p>© 2024 RIZA I.A. | Todos os direitos reservados</p>
+    </footer>
+
+    <!-- Scripts de gerenciamento e funcionalidades -->
+    <script src="limpadorDeEntrada.js"></script>
+    <script src="gerenciadorDeRespostas.js"></script>
+    <script src="sugestoes.js"></script>
+    <script src="gerenciadorDeHistorico.js"></script>
+    <script src="dadosDeProdutos.js"></script>
+    <script src="gerenciadorDeCarrinho.js"></script>
+    <script src="gerenciadorDePromocoes.js"></script>
+    <script src="chatbot.js"></script>
+    <script src="audio.js"></script>
+    
+
+    <script>
+        
+        // Função para adicionar a classe de animação às mensagens
+        function addFadeInEffect() {
+            const messages = document.querySelectorAll('#messages > div'); // Seleciona todas as mensagens
+            messages.forEach(message => {
+                message.classList.add('fade-in'); // Adiciona a classe de animação
+            });
+        }
+
+        // Chame a função sempre que uma nova mensagem for adicionada
+        document.getElementById('send-button').addEventListener('click', () => {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.trim() !== '') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message'; // Classe para estilo das mensagens
+                messageDiv.textContent = userInput; // Define o texto da mensagem
+                document.getElementById('messages').appendChild(messageDiv); // Adiciona a mensagem ao chat
+
+                document.getElementById('user-input').value = ''; // Limpa o campo de entrada
+
+                addFadeInEffect(); // Adiciona o efeito de fade-in
+            }
+        });
+
+        // Função para limpar a conversa
+        document.getElementById('clear-button').addEventListener('click', () => {
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = ''; // Limpa o conteúdo das mensagens
+
+            const productTable = document.getElementById('product-table');
+            productTable.innerHTML = ''; // Limpa o conteúdo da tabela
+            productTable.style.display = 'none'; // Esconde a tabela
+        });
+
+        // Função para mostrar produtos
+        document.getElementById('show-products-button').addEventListener('click', () => {
+            DadosDeProdutos.obterProdutos();
+        });
+
+        // Função para limpar apenas a tabela
+        document.getElementById('clear-table-button').addEventListener('click', () => {
+            const productTable = document.getElementById('product-table');
+            productTable.innerHTML = ''; // Limpa o conteúdo da tabela
+            productTable.style.display = 'none'; // Esconde a tabela
+        });
+
+        // Função para mostrar informações sobre a IA
+        const modal = document.getElementById("about-modal");
+        const aboutButton = document.getElementById("about-button");
+        const span = document.getElementsByClassName("close")[0];
+
+        aboutButton.addEventListener("click", () => {
+            modal.style.display = "block"; // Mostra o modal
+        });
+
+        // Fecha o modal ao clicar no botão de fechar
+        span.onclick = () => {
+            modal.style.display = "none"; // Esconde o modal
+        };
+
+        // Fecha o modal ao clicar fora dele
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none"; // Esconde o modal
+            }
+        };
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            body.classList.toggle('light-theme');
+        });
+    </script>
+</body>
+</html>
