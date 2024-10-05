@@ -31,6 +31,7 @@
 **`console.css` Estilização da interface de console.**  
 **`gerenciadorDeHistorico.js` Módulo para gerenciar o histórico de interações do usuário.**  
 **`gerenciadorDePromocoes.js` Módulo para gerenciar promoções e ofertas especiais.**  
+**`gerenciadorDeCarrinho` Módulo para gerenciar a futura função de  "carrinho de compras".**  
 
 # Aviso
 
